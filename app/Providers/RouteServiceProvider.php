@@ -46,6 +46,14 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->mapWebRoutes();
 
+        $this->mapPostsRoutes();
+
+        $this->mapUsersRoutes();
+
+        $this->mapRolesRoutes();
+
+        $this->mapPermissionsRoutes();
+
         //
     }
 
@@ -60,7 +68,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         Route::middleware('web')
             ->namespace($this->namespace)
-            ->group(base_path('routes/web.php'));
+            ->group(base_path('routes/web/web.php'));
     }
 
     /**
@@ -75,6 +83,38 @@ class RouteServiceProvider extends ServiceProvider
         Route::prefix('api')
             ->middleware('api')
             ->namespace($this->namespace)
-            ->group(base_path('routes/api.php'));
+            ->group(base_path('routes/api/api.php'));
+    }
+
+    protected function mapPostsRoutes()
+    {
+        Route::prefix('admin')
+            ->middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/web/posts.php'));
+    }
+
+    protected function mapUsersRoutes()
+    {
+        Route::prefix('admin')
+            ->middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/web/users.php'));
+    }
+
+    protected function mapRolesRoutes()
+    {
+        Route::prefix('admin')
+            ->middleware(['web','auth','role:admin'])
+            ->namespace($this->namespace)
+            ->group(base_path('routes/web/roles.php'));
+    }
+
+    protected function mapPermissionsRoutes()
+    {
+        Route::prefix('admin')
+            ->middleware(['web','auth','role:admin'])
+            ->namespace($this->namespace)
+            ->group(base_path('routes/web/permissions.php'));
     }
 }
